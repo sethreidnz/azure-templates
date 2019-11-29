@@ -4,12 +4,15 @@ using System.Reflection;
 using System.Threading.Tasks;
 using AzureTemplates.ServiceBus.Options;
 using AzureTemplates.ServiceBus.Services;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace AzureTemplates.ServiceBus.Consumer
 {
-  public static class Program
+  public class Program
   {
     public static async Task Main()
     {
@@ -21,11 +24,30 @@ namespace AzureTemplates.ServiceBus.Consumer
         .AddUserSecrets(Assembly.GetExecutingAssembly())
         .Build();
 
+      // setup keyvault
+      var keyVaultEndpoint = config.GetValue<string>("KeyVaultEndpoint");
+      var environment = config.GetValue<string>("Environment");
+      var managedIdentityOptions = config.GetValue<string>("ManagedIdentity:ClientId");
+      var azureServiceTokenProvider = new AzureServiceTokenProvider(environment == "local" ? null : $"RunAs=App;AppId={managedIdentityOptions}");
+      var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
+
+      // get a secret from keyvault
+      var secret = await keyVaultClient.GetSecretAsync(keyVaultEndpoint, "KeyVaultSecret");
+
       // create service collection for dependency injection
       var services = new ServiceCollection();
 
       // configure options from appsettings.json
       services.Configure<ManagedIdentityOptions>(config.GetSection("ManagedIdentity"));
+
+      // configure logging
+      services.AddLogging(logging =>
+      {
+        logging.AddConfiguration(config.GetSection("Logging"));
+        logging.AddConsole();
+        logging.AddDebug();
+        logging.AddApplicationInsights(config.GetValue<string>("ApplicationInsightsKey"));
+      });
 
       // configure services
       services.AddSingleton<IMessageProcessor, MessageProcessor>();
@@ -37,9 +59,7 @@ namespace AzureTemplates.ServiceBus.Consumer
       var messageProcessor = serviceProvider.GetService<IMessageProcessor>();
 
       // process the message
-      await Console.Out.WriteAsync("Processing Message");
       await messageProcessor.ProcessMessage();
-      await Console.Out.WriteAsync("Successfully consumed message");
     }
   }
 }

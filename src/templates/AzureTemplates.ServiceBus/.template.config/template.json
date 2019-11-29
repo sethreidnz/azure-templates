@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "sethreidnz",
+  "classifications": [ "Console" ], 
+  "name": "AzureTemplates.ServiceBus.Consumer",
+  "identity": "AzureTemplates.ServiceBus.Consumer",         
+  "groupIdentity":"AzureTemplates.ServiceBus.Consumer",
+  "shortName": "azure-service-bus",
+  "tags": {
+    "language": "C#",
+    "type":"project"
+  },
+  "sourceName": "AzureTemplates.ServiceBus.Consumer", 
+  "preferNameDirectory":true
+}

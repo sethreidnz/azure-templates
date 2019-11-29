@@ -21,6 +21,7 @@ namespace AzureTemplates.ServiceBus.Consumer
         .AddUserSecrets(Assembly.GetExecutingAssembly())
         .Build();
 
+      // create service collection for dependency injection
       var services = new ServiceCollection();
 
       // configure options from appsettings.json
@@ -29,10 +30,13 @@ namespace AzureTemplates.ServiceBus.Consumer
       // configure services
       services.AddSingleton<IMessageProcessor, MessageProcessor>();
 
+      // build service provider from the service collection
       var serviceProvider = services.BuildServiceProvider();
 
-      // process the message
+      // get the message processor service from the service provider
       var messageProcessor = serviceProvider.GetService<IMessageProcessor>();
+
+      // process the message
       await Console.Out.WriteAsync("Processing Message");
       await messageProcessor.ProcessMessage();
       await Console.Out.WriteAsync("Successfully consumed message");

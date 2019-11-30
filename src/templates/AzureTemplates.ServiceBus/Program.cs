@@ -27,8 +27,8 @@ namespace AzureTemplates.ServiceBus.Consumer
       // setup keyvault
       var keyVaultEndpoint = config.GetValue<string>("KeyVaultEndpoint");
       var environment = config.GetValue<string>("Environment");
-      var managedIdentityOptions = config.GetValue<string>("ManagedIdentity:ClientId");
-      var azureServiceTokenProvider = new AzureServiceTokenProvider(environment == "local" ? null : $"RunAs=App;AppId={managedIdentityOptions}");
+      var managedIdentityClientId = config.GetValue<string>("ManagedIdentity:ClientId");
+      var azureServiceTokenProvider = new AzureServiceTokenProvider(environment == "local" ? null : $"RunAs=App;AppId={managedIdentityClientId}");
       var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
 
       // get a secret from keyvault

@@ -21,14 +21,13 @@ namespace AzureTemplates.ServiceBus.Consumer
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json")
         .AddEnvironmentVariables()
-        .AddUserSecrets(Assembly.GetExecutingAssembly())
         .Build();
 
       // setup keyvault
       var keyVaultEndpoint = config.GetValue<string>("KeyVaultEndpoint");
       var environment = config.GetValue<string>("Environment");
-      var managedIdentityClientId = config.GetValue<string>("ManagedIdentity:ClientId");
-      var azureServiceTokenProvider = new AzureServiceTokenProvider(environment == "local" ? null : $"RunAs=App;AppId={managedIdentityClientId}");
+      var managedIdentityOptions = config.GetValue<string>("ManagedIdentity:ClientId");
+      var azureServiceTokenProvider = new AzureServiceTokenProvider(environment == "local" ? null : $"RunAs=App;AppId={managedIdentityOptions}");
       var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
 
       // get a secret from keyvault
@@ -43,10 +42,11 @@ namespace AzureTemplates.ServiceBus.Consumer
       // configure logging
       services.AddLogging(logging =>
       {
-        logging.AddConfiguration(config.GetSection("Logging"));
-        logging.AddConsole();
-        logging.AddDebug();
-        logging.AddApplicationInsights(config.GetValue<string>("ApplicationInsightsKey"));
+        logging
+          .AddConfiguration(config.GetSection("Logging"))
+          .AddConsole()
+          .AddDebug()
+          .AddApplicationInsights(config.GetValue<string>("ApplicationInsightsKey"));
       });
 
       // configure services

@@ -1,13 +1,10 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
-using AzureTemplates.ServiceBus.Authentication;
-using AzureTemplates.ServiceBus.Options;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
-namespace AzureTemplates.ServiceBus.Services
+namespace AzureTemplates.ServiceBus.Consumer.Services.
 {
   public class MessageProducer : IMessageProducer
   {

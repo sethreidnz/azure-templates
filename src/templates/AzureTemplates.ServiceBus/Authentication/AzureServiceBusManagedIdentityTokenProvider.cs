@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus.Primitives;
 using Microsoft.Azure.Services.AppAuthentication;
 
-namespace AzureTemplates.ServiceBus.Authentication
+namespace AzureTemplates.ServiceBus.Consumer.Authentication
 {
   public class AzureServiceBusManagedIdentityTokenProvider : ITokenProvider
   {

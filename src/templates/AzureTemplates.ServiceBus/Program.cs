@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using AzureTemplates.ServiceBus.Authentication;
-using AzureTemplates.ServiceBus.Options;
-using AzureTemplates.ServiceBus.Services;
+using AzureTemplates.ServiceBus.Consumer.Authentication;
+using AzureTemplates.ServiceBus.Consumer.Options;
+using AzureTemplates.ServiceBus.Consumer.Services;
 using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.Services.AppAuthentication;

@@ -1,4 +1,4 @@
-namespace AzureTemplates.ServiceBus.Options
+namespace AzureTemplates.ServiceBus.Consumer.Options
 {
   public class ServiceBusOptions
   {

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace AzureTemplates.ServiceBus.Services
+namespace AzureTemplates.ServiceBus.Consumer.Services
 {
   public interface IMessageProducer
   {
